@@ -1,0 +1,12 @@
+{
+  "name": "admin-cart-builder",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "weweb serve",
+    "build": "weweb build --name=admin-cart-builder --type=element"
+  },
+  "devDependencies": {
+    "@weweb/cli": "latest"
+  }
+}
