@@ -587,6 +587,8 @@ export default {
   box-sizing: border-box;
   padding: 1.5rem;
   background: var(--spread-background);
+  max-width: 1440px;
+  margin-inline: auto;
 }
 
 .spread-cb *, .spread-cb *::before, .spread-cb *::after { box-sizing: border-box; margin: 0; padding: 0; }
