@@ -1,5 +1,13 @@
 <template>
   <div v-if="!content.portalTarget || content.portalTarget === 'admin'" class="spread-cb">
+    <div v-if="permissionGranted !== true" class="spread-perm-overlay" style="position:absolute;inset:0;z-index:9999;background:var(--spread-cream,#FBFAF8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;text-align:center;">
+      <div v-if="permissionGranted === null" style="width:24px;height:24px;border:3px solid rgba(0,0,0,0.1);border-top-color:var(--spread-accent,#CE6632);border-radius:50%;animation:spread-perm-spin 0.7s linear infinite;"></div>
+      <template v-else>
+        <span style="font-size:32px;line-height:1;">🔒</span>
+        <strong style="font-size:15px;font-weight:700;color:var(--spread-black,#141414);margin:0;">Access denied</strong>
+        <span style="font-size:13px;color:var(--spread-mid-grey,#6B7280);">You don't have permission to view this area.</span>
+      </template>
+    </div>
     <!-- Gate: no credentials -->
     <div v-if="!content.accessToken || !content.userId" class="spread-cb__gate">
       <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -338,6 +346,7 @@ export default {
 
   data() {
     return {
+      permissionGranted: null,
       STEPS,
       canManageOrders:    true,
       activeSection:      'customer',
@@ -378,6 +387,7 @@ export default {
 
   watch: {
     activeSection(val) { this.setCartBuilderActive(val !== 'customer' || !!this.cartId); },
+    'content.accessToken': { immediate: true, handler(token) { if (token) this.checkAdminPermission(); else this.permissionGranted = false; } },
   },
 
   mounted() {
@@ -397,6 +407,20 @@ export default {
   },
 
   methods: {
+    async checkAdminPermission() {
+      const t = this.content?.accessToken, u = this.content?.userId,
+            url = this.content?.supabaseUrl, k = this.content?.supabaseAnonKey;
+      if (!t || !u || !url || !k) { this.permissionGranted = false; return; }
+      try {
+        const r = await fetch(`${url}/rest/v1/rpc/has_role`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: k, Authorization: `Bearer ${t}` },
+          body: JSON.stringify({ p_user_id: u, p_role_key: 'admin' }),
+        });
+        this.permissionGranted = r.ok ? !!(await r.json()) : false;
+      } catch { this.permissionGranted = false; }
+    },
+
     client() {
       return createSpreadClient(this.content?.supabaseUrl, this.content?.supabaseAnonKey, this.content?.accessToken);
     },
@@ -589,6 +613,7 @@ export default {
   background: var(--spread-background);
   max-width: 1440px;
   margin-inline: auto;
+  position: relative;
 }
 
 .spread-cb *, .spread-cb *::before, .spread-cb *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -737,4 +762,5 @@ export default {
 .spread-cb__inline-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--spread-border); border-top-color: var(--spread-accent); border-radius: 50%; animation: spread-cb-spin 0.6s linear infinite; flex-shrink: 0; }
 .spread-cb__inline-spinner--white { border-color: rgba(255,255,255,0.3); border-top-color: #fff; }
 @keyframes spread-cb-spin { to { transform: rotate(360deg); } }
+@keyframes spread-perm-spin { to { transform: rotate(360deg); } }
 </style>
