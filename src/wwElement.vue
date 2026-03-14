@@ -762,5 +762,11 @@ export default {
 .spread-cb__inline-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--spread-border); border-top-color: var(--spread-accent); border-radius: 50%; animation: spread-cb-spin 0.6s linear infinite; flex-shrink: 0; }
 .spread-cb__inline-spinner--white { border-color: rgba(255,255,255,0.3); border-top-color: #fff; }
 @keyframes spread-cb-spin { to { transform: rotate(360deg); } }
+@media (max-width: 479px) {
+  .spread-cb { padding: 12px; }
+}
+@media (min-width: 1280px) {
+  .spread-cb { padding: 28px 40px; }
+}
 @keyframes spread-perm-spin { to { transform: rotate(360deg); } }
 </style>
