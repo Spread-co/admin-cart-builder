@@ -644,6 +644,10 @@ export default {
 /* Build layout */
 .spread-cb__build-layout { display: flex; flex-direction: column; gap: 1rem; }
 @media (min-width: 768px) { .spread-cb__build-layout { flex-direction: row; gap: 1.25rem; } }
+
+@media (min-width: 1024px) {
+  .spread-cb__build-layout { gap: 2rem; }
+}
 .spread-cb__products-panel { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 .spread-cb__cart-panel { flex: 1; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 
