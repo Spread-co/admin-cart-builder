@@ -161,9 +161,9 @@
                   <span class="spread-cb__cart-item-price">{{ formatCents(item.unit_price) }}</span>
                 </div>
                 <div class="spread-cb__qty-stepper">
-                  <button class="spread-cb__qty-btn" @click="adjustQty(item, -1)" :disabled="item.qty <= 1">−</button>
+                  <button class="spread-cb__qty-btn" @click="adjustQty(item, -1)" :disabled="item.qty <= 1" title="Decrease quantity" aria-label="Decrease quantity">−</button>
                   <span class="spread-cb__qty-val">{{ item.qty }}</span>
-                  <button class="spread-cb__qty-btn" @click="adjustQty(item, +1)">+</button>
+                  <button class="spread-cb__qty-btn" @click="adjustQty(item, +1)" title="Increase quantity" aria-label="Increase quantity">+</button>
                 </div>
                 <span class="spread-cb__cart-item-total">{{ formatCents(item.line_total) }}</span>
                 <button class="spread-cb__cart-item-remove" @click="removeItem(item)" title="Remove">
@@ -772,4 +772,25 @@ export default {
   .spread-cb { padding: 28px 40px; }
 }
 @keyframes spread-perm-spin { to { transform: rotate(360deg); } }
+
+/* ── Dark mode ─────────────────────────────────────────────────────── */
+:global(html.dark) .spread-cb {
+  background: #000000;
+  color: #f5f0eb;
+  --spread-cream: #18181b;
+  --spread-border: rgba(230, 216, 202, 0.12);
+  --spread-border-outer: rgba(230, 216, 202, 0.15);
+  --spread-text-primary: #f5f0eb;
+  --spread-text-secondary: rgba(230, 216, 202, 0.65);
+  --spread-text-muted: rgba(230, 216, 202, 0.4);
+}
+:global(html.dark) .spread-cb__card,
+:global(html.dark) .spread-cb__panel { background: #18181b; border-color: rgba(230,216,202,0.12); }
+:global(html.dark) .spread-cb__input,
+:global(html.dark) .spread-cb__select { background: #160c11; border-color: rgba(230,216,202,0.2); color: #f5f0eb; }
+:global(html.dark) .spread-cb__label { color: rgba(230,216,202,0.65); }
+:global(html.dark) .spread-cb__heading { color: #f5f0eb; }
+:global(html.dark) .spread-cb__divider { border-color: rgba(230,216,202,0.1); }
+:global(html.dark) .spread-cb__item-row { border-bottom-color: rgba(230,216,202,0.08); color: rgba(230,216,202,0.75); }
+:global(html.dark) .spread-cb__item-price { color: #bead38; }
 </style>
